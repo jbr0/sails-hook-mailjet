@@ -7,6 +7,7 @@ var fs    = require('fs');
 var path  = require('path');
 var async = require('async');
 var _     = require('lodash');
+var mjml2html = require('mjml').mjml2html;
 
 /**
  * Mailjet Hook
@@ -26,15 +27,26 @@ module.exports = function mailjet(sails) {
   var self;
 
   var compileTemplate = function (view, data, cb) {
+
     // Use Sails View Hook if available
     if (sails.hooks.views && sails.hooks.views.render) {
       var relPath = path.relative(sails.config.paths.views, view);
-      sails.hooks.views.render(relPath, data, cb);
+
+      sails.hooks.views.render(relPath, data, function (err, html) {
+
+        if (err) return cb(err);
+
+        return cb(null, mjml2html(html).html);
+
+      });
+
       return;
+
     }
 
     // No Sails View hook, fallback to ejs
     fs.readFile(view + '.ejs', function (err, source) {
+
       if (err) return cb(err);
 
       try {
@@ -42,10 +54,18 @@ module.exports = function mailjet(sails) {
           cache: true, filename: view
         });
 
-        cb(null, compileFn(data));
+        // EJS compile
+        var mjmlTemplate = compileFn(data);
+
+        // MJML compile
+        var compiledData = mjml2html(mjmlTemplate).html;
+
+        return cb(null, compiledData);
+
       } catch (e) {
         return cb(e);
       }
+
     });
   };
 
@@ -172,8 +192,19 @@ module.exports = function mailjet(sails) {
 
       // ASYNC callback
       function (err, results) {
-        if (err) return cb(err);
-        cb(null, results.sendEmail);
+
+        if (cb) {
+
+          if (err) {
+            return cb(err);
+          }
+
+          return cb(null, results.sendEmail);
+
+        }
+
+        return;
+
       });
     }
 
