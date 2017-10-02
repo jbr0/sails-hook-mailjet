@@ -1,4 +1,4 @@
-# sails-hook-mailjet
+# sails-hook-mailjet-mjml (WIP)
 
 Email hook for [Sails JS](http://sailsjs.org), using [Mailjet](https://dev.mailjet.com/guides). This was built based on a fork of [sails-hook-email](https://github.com/balderdashy/sails-hook-email).
 
@@ -6,11 +6,11 @@ Email hook for [Sails JS](http://sailsjs.org), using [Mailjet](https://dev.mailj
 
 ### Installation
 
-`npm install sails-hook-mailjet`
+`npm install sails-hook-mailjet-mjml`
 
 ### Usage
 
-`sails.hooks.mailjet.send(template, data, options, cb)`
+`sails.hooks['mailjet-mjml'].send(template, data, options, cb)`
 
 Parameter      | Type                | Details
 -------------- | ------------------- |:---------------------------------
@@ -21,7 +21,7 @@ cb             | ((function))        | Callback to be run after the email sends 
 
 ### Configuration
 
-By default, configuration lives in `sails.config.mailjet`.  The configuration key (`mailjet`) can be changed by setting `sails.config.hooks['sails-hook-mailjet'].configKey`.
+By default, configuration lives in `sails.config['mailjet-mjml']`.  The configuration key (`mailjet-mjml`) can be changed by setting `sails.config.hooks['sails-hook-mailjet-mjml'].configKey`.
 
 Parameter      | Type                | Details
 -------------- | ------------------- |:---------------------------------
@@ -47,7 +47,7 @@ Given the following **html.ejs** file contained in the folder **views/mailjetTem
 executing the following command:
 
 ```
-sails.hooks.mailjet.send(
+sails.hooks['mailjet-mjml'].send(
   "testEmail",
   {
     recipientName: "Joe",
