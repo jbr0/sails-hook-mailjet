@@ -180,11 +180,11 @@ module.exports = function mailjet(sails) {
             });
 
           request
-            .on('success', function (response, body) {
-              return (null, response, body);
+            .then(function (result) {
+              return next(null, result.response, result.body);
             })
-            .on('error', function (err, response) {
-              return (err, response);
+            .catch(function (err) {
+              return next(err);
             });
         }]
 
