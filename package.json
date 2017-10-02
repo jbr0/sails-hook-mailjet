@@ -1,6 +1,6 @@
 {
   "name": "sails-hook-mailjet-mjml",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mailjet hook for Sails with MJML integration",
   "main": "index.js",
   "scripts": {
